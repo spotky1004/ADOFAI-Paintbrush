@@ -40,7 +40,7 @@ function tick() {
   // DIsplay Status
   statusEle.branches.innerText = Branches.length;
   statusEle.tiles.innerText = Branches.reduce((a, b) => a + b.length-1, 0);
-  statusEle.tickRate.innerText = (tickRecords.reduce((a, b) => a + b, 0)/tickRecords.length).toFixed(1) + "/s";
+  statusEle.tickRate.innerText = (1000/(tickRecords.reduce((a, b) => a + b, 0)/tickRecords.length)).toFixed(1) + "/s";
 
   // Set canvas variables
   canvas.width = canvasContainer.offsetWidth * (1 - 0.025 * 3);
