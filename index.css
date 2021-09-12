@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+
+  font-size: 16px;
+  font-family: 'Space Mono', monospace;
+
+  overflow: hidden;
+  user-select: none;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+
+  background-color: rgb(30, 25, 44);
+}
+body > div {
+  background-color: #6664;
+}
+
+#status {
+  display: flex;
+}
+
+#status > span {
+  flex: 1;
+
+  color: #ddd;
+  font-size: 1.5em;
+  text-align: center;
+  text-shadow: 0.3vmin 0.3vmin 0 #000;
+}
+#status > span:not(:last-child) {
+  border-right: 1vmin solid rgb(30, 25, 44);
+}
+#status > span > span {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  font-size: 2em;
+}
+#branch-count {
+  color: rgb(218, 106, 54);
+}
+#tile-count {
+  color: rgb(81, 218, 54);
+}
+#tick-rate {
+  color: rgb(27, 146, 201);
+}
+
+#canvas-container {
+  --padding: 2.5%;
+  --sizeBorder: 0.2vmin solid #fff2;
+
+  position: relative;
+  padding: var(--padding);
+
+  height: 70%;
+
+  box-sizing: border-box;
+}
+#canvas-container::before {
+  position: absolute;
+  top: var(--padding);
+  right: var(--padding);
+
+  width: calc(100% - var(--padding) * 3);
+  text-align: center;
+
+  border-bottom: var(--sizeBorder);
+  border-left: var(--sizeBorder);
+  border-right: var(--sizeBorder);
+
+  content: attr(w) " Tiles";
+  color: #ccc;
+}
+#canvas-container::after {
+  position: absolute;
+  bottom: var(--padding);
+  left: var(--padding);
+
+  height: calc(100% - var(--padding) * 4);
+  text-align: center;
+
+  border-bottom: var(--sizeBorder);
+  border-top: var(--sizeBorder);
+  border-right: var(--sizeBorder);
+
+  content: attr(h) " Tiles";
+  color: #ccc;
+  writing-mode: vertical-lr;
+  text-orientation: mixed;
+}
+#canvas {
+  position: absolute;
+  top: calc(var(--padding) * 3);
+  right: var(--padding);
+
+  border: 0.05vmin solid #6665;
+}
+
+#info {
+  padding: 0.4% 0;
+
+  color: #aaa;
+  text-align: center;
+}
