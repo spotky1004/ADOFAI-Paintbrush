@@ -150,8 +150,8 @@ document.addEventListener("mouseup", _ => {
 canvas.addEventListener("mousemove", e => {
   const canvasPos = canvas.getBoundingClientRect();
   drawingPos = [
-    e.clientX - canvasPos.left - screenPos[0] - canvas.offsetWidth / 2 - screenScale,
-    e.clientY - canvasPos.top - screenPos[1] - canvas.offsetHeight / 2
+    e.clientX - canvasPos.left + screenPos[0] - canvas.offsetWidth / 2 - screenScale,
+    e.clientY - canvasPos.top + screenPos[1] - canvas.offsetHeight / 2
   ].map(e => e/screenScale);
 });
 document.addEventListener("keydown", e => {
