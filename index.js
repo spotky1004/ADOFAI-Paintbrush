@@ -134,7 +134,7 @@ requestAnimationFrame(tick);
 // Events
 canvas.addEventListener("wheel", e => {
   screenScale *= e.deltaY < 0 ? 1.05 : 1/1.05;
-  screenScale = Math.max(10, Math.min(100, screenScale));
+  screenScale = Math.max(1, Math.min(300, screenScale));
 });
 canvas.addEventListener("mousedown", _ => {
   drawing = true;
