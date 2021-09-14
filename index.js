@@ -1,43 +1,49 @@
+/**
+ * Init values
+ */
+// Canvas
 const canvas = document.getElementById("canvas");
 /** @type {CanvasRenderingContext2D} */
 const ctx = canvas.getContext("2d");
 const canvasContainer = document.getElementById("canvas-container");
 
-
-
+// Tile
 const Branches = [
   [[0, 0], 90, 90, 90, 90, 90, 90],
 ]; // [position, ...tilePointer]
 let TilePos = []; // Computed Tile positions
 const BranchBin = []; // The place deleted branch goes
 
+// Screen
 let screenPos = [0, 0];
 let screenScale = 50; // scale: 1 -> 1 tile per 1 px
 
+// Draw
 let drawing = false;
 let drawingBranch = null;
 let lastDrawingPos = [null, null];
 let drawingPos = [null, null];
 
+// Status
 const statusEle = {
   branches: document.getElementById("branch-count"),
   tiles: document.getElementById("tile-count"),
   tickRate: document.getElementById("tick-rate"),
 };
-
 let prevTime = new Date().getTime();
 let tickRecords = new Array(10).fill(1000/60);
 
 
-
+/**
+ * Tick Function
+ */
 function tick() {
   // Record time
   const curTime = new Date().getTime();
-  tickRecords = tickRecords.slice(1);
-  tickRecords.push(curTime - prevTime);
+  tickRecords = tickRecords.slice(1).concat([curTime - prevTime]);
   prevTime = curTime;
 
-  // DIsplay Status
+  // Dusplay Status
   statusEle.branches.innerText = Branches.length;
   statusEle.tiles.innerText = Branches.reduce((a, b) => a + b.length-1, 0);
   statusEle.tickRate.innerText = (1000/(tickRecords.reduce((a, b) => a + b, 0)/tickRecords.length)).toFixed(1) + "/s";
@@ -52,27 +58,19 @@ function tick() {
   ctx.lineWidth = screenScale/2;
 
   // Add Tiles
+  const diff = [
+    drawingPos[0] - lastDrawingPos[0],
+    drawingPos[1] - lastDrawingPos[1]
+  ];
   if (
     drawing &&
-    Math.sqrt(
-      (lastDrawingPos[0] - drawingPos[0])**2 +
-      (lastDrawingPos[1] - drawingPos[1])**2
-    ) >= 1
+    Math.sqrt(diff[0]**2 + diff[1]**2) >= 1
   ) {
-    const length = Math.floor(Math.sqrt(
-      (lastDrawingPos[0] - drawingPos[0])**2 +
-      (lastDrawingPos[1] - drawingPos[1])**2
-    ));
-    const diff = [
-      drawingPos[1] - lastDrawingPos[1],
-      drawingPos[0] - lastDrawingPos[0]
-    ];
-    const deg = (Math.atan2(...diff)/Math.PI*180 + 720 + 90)%360;
+    const length = Math.floor(Math.sqrt(diff[0]**2 + diff[1]**2));
+    const deg = (Math.atan2(diff[1], diff[0])/Math.PI*180 + 720 + 90)%360;
     Branches[drawingBranch].push(...new Array(length).fill(deg));
-    lastDrawingPos = [
-      lastDrawingPos[0] + Math.sin(deg/180*Math.PI) * length,
-      lastDrawingPos[1] - Math.cos(deg/180*Math.PI) * length,
-    ];
+    lastDrawingPos[0] += Math.sin(deg/180*Math.PI) * length;
+    lastDrawingPos[1] -= Math.cos(deg/180*Math.PI) * length
   }
 
   // Draw Tiles on canvas
@@ -111,7 +109,7 @@ function tick() {
       ctx.lineTo(...forwardPos);
       ctx.stroke();
 
-      if (curDeg % 90 !== 0) {
+      if (curDeg % 90 !== 0 || nextDeg % 90 !== 0) {
         ctx.arc(...startPos, screenScale/4, 0, Math.PI * 2);
       } else {
         ctx.rect(
@@ -127,11 +125,12 @@ function tick() {
 
   requestAnimationFrame(tick);
 }
-
 // Start Loop
 requestAnimationFrame(tick);
 
-// Events
+/**
+ * Events
+ */
 canvas.addEventListener("wheel", e => {
   screenScale *= e.deltaY < 0 ? 1.05 : 1/1.05;
   screenScale = Math.max(1, Math.min(300, screenScale));
@@ -182,6 +181,9 @@ document.addEventListener("keydown", e => {
   }
 });
 
+/**
+ * Export Function
+ */
 function exportMap() {
   const data = {
     "angleData": Branches.map(e => e.slice(1).map(e => (720+90-e)%360)).flat(), 
