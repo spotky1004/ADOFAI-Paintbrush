@@ -255,11 +255,11 @@ function exportMap() {
     tileCur += TilePos[i-1].length;
     const lastTile = TilePos[i-1].slice(-1)[0];
     const startTile = TilePos[i][0];
-    const tileDeg = Branches[i][1];
+    const lastTileDeg = Branches[i-1].slice(-1)[0];
     const diff = [
-      startTile[0] - lastTile[0] - Math.sin(tileDeg/180*Math.PI),
-      -(startTile[1] - lastTile[1] + Math.cos(tileDeg/180*Math.PI))
-    ]
+      startTile[0] - lastTile[0] - Math.sin(lastTileDeg/180*Math.PI),
+      -(startTile[1] - lastTile[1] + Math.cos(lastTileDeg/180*Math.PI))
+    ];
     data.actions.push({
       "floor": tileCur+1,
       "eventType": "PositionTrack",
