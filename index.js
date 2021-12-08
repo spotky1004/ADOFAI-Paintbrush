@@ -109,7 +109,8 @@ function tick() {
       ctx.lineTo(...forwardPos);
       ctx.stroke();
 
-      if ((curDeg-nextDeg+360*3)%360 !== 90) {
+      ctx.beginPath();
+      if (curDeg % 90 !== 0 || nextDeg % 90 !== 0) {
         ctx.arc(...startPos, screenScale/4, 0, Math.PI * 2);
       } else {
         ctx.rect(
